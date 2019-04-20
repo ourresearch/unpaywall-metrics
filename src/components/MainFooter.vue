@@ -8,7 +8,7 @@
                 <div>
                     <ul class="contact-links">
                         <li>
-                            <a href="https://twitter.com/gettheresearch">
+                            <a href="https://twitter.com/unpaywall">
                                 <i class="fab fa-twitter"></i>
                                 <span class="text">
                                     Twitter
@@ -44,12 +44,6 @@
             <div class="col md-layout-item md-size-50 md-xsmall-size-100 about">
                 <div>
                     Built with <i class="far fa-heart"></i> at <a href="http://impactstory.org">Impactstory.</a>
-                </div>
-                <hr>
-
-                <div>
-                    Made possible by the support of <a href="https://www.arcadiafund.org.uk/">Arcadia</a> – a charitable fund of Lisbet Rausing and Peter Baldwin.
-
                 </div>
             </div>
         </div>
