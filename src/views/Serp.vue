@@ -27,7 +27,7 @@
 
             <div class="results-list" v-if="!error">
 
-                <template v-for="(result, index) of displayResults">
+                <template v-for="(result) of displayResults">
                     <div class="row"
                          :class="{selected: result.isSelected}"
                          @click="setArticleZoom(result.doi)">

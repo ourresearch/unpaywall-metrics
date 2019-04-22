@@ -3,7 +3,8 @@ import Router from 'vue-router'
 import Serp from './views/Serp'
 import Home from './views/Home'
 import Welcome from './views/Welcome'
-import EarlyAccess from './views/EarlyAccess'
+import Journals from './views/Journals'
+import Articles from './views/Articles'
 import Meta from 'vue-meta'
 
 
@@ -15,12 +16,12 @@ export default new Router({
     mode: "history",
     routes: [
         {
-            path: '/welcome',
-            component: Welcome
+            path: '/articles',
+            component: Articles
         },
         {
-            path: '/early-access',
-            component: EarlyAccess
+            path: '/journals',
+            component: Journals
         },
         {
             path: '/',
