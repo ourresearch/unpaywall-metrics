@@ -30,7 +30,7 @@
       },
       metaInfo: {
         // if no subcomponents specify a metaInfo.title, this title will be used
-        title: 'Get the research'
+        title: 'Unpaywall Metrics'
       }
   }
 </script>
