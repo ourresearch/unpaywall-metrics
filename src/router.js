@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Serp from './views/Serp'
 import Home from './views/Home'
 import Journals from './views/Journals'
 import Articles from './views/Articles'
@@ -24,15 +23,7 @@ export default new Router({
         },
         {
             path: '/',
-            // redirect: "/search"
             component: Home
-        },
-
-        {
-            path: '/search/:q',
-            name: 'search',
-            component: Serp,
-            reloadOnSearch: false
         }
     ]
 })

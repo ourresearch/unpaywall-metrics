@@ -1,19 +1,72 @@
 <template>
-  <div id="app" class="container">
 
-    <main-header />
+  <v-app id="inspire">
+    <v-navigation-drawer
+      fixed
+      v-model="drawer"
+      app
+    >
+      <v-list dense>
+        <v-list-tile href="/">
+          <v-list-tile-action>
+            <v-icon>home</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Home</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
 
-    <div class="container-wrapper md-layout-row">
-      <router-view/>
-    </div>
+        <v-list-tile href="/">
+          <v-list-tile-action>
+            <v-icon>contact_mail</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Journals</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
 
-    <main-footer />
+        <v-list-tile href="/">
+          <v-list-tile-action>
+            <v-icon>contact_mail</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Articles</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
 
+      </v-list>
+    </v-navigation-drawer>
 
-  </div>
+    <v-toolbar color="indigo" dark fixed app>
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title>UC Elsevier cancellation browser</v-toolbar-title>
+    </v-toolbar>
 
+    <v-content>
+      <v-container fluid fill-height>
+        <v-layout
+          justify-center
+          align-center
+        >
 
+          <router-view></router-view>
 
+<!--          <v-flex text-xs-center>-->
+<!--            <v-tooltip left>-->
+<!--              <v-btn icon large :href="source" target="_blank" slot="activator">-->
+<!--                <v-icon large>code</v-icon>-->
+<!--              </v-btn>-->
+<!--              <span>Source</span>-->
+<!--            </v-tooltip>-->
+<!--          </v-flex>-->
+
+        </v-layout>
+      </v-container>
+    </v-content>
+    <v-footer color="indigo" app inset>
+      <span class="white--text">&copy; 2017</span>
+    </v-footer>
+  </v-app>
 
 
 
@@ -24,6 +77,9 @@
   import MainFooter from './components/MainFooter'
   export default {
       name: 'App',
+    data: () => ({
+    drawer: null
+  }),
       components: {
           MainHeader,
           MainFooter
@@ -59,58 +115,12 @@
   }
 
   body {
-    background: #fff;
     font-size: 16px;
     font-family: Lato, sans-serif;
     &.noscroll {
       overflow: hidden
     }
-
-
-    .container {
-      line-height: 1.3;
-      font-size: 16px;
-    }
-
-    hr {
-      opacity: .1;
-    }
-    code {
-      padding: 2px 5px;
-      border: 1px solid #ddd;
-      border-radius: 3px;
-      font-size: 90%;
-    }
-    h1 {
-      margin-top: 50px;
-    }
-    h2 {
-      margin-top: 50px;
-    }
-    .md-button.md-primary {
-     //   background-color: $primary-color !important;
-    }
-  }
-  div.page {
-    font-size: 18px;
-    line-height: 1.5;
-    max-width: 800px;
-    margin: 0 auto;
-    padding-bottom: 100px;
-    min-height: 80vh;
   }
 
-
-  .vue-typer {
-    .custom.char {
-      /*color: #fff;*/
-    }
-  }
-
-  div.mc-banner {
-    bottom: 0 !important;
-    background: rgba(255,255,255, .95);
-    top: auto;
-  }
 
 </style>

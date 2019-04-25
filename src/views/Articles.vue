@@ -18,9 +18,6 @@
 
 <style scoped lang="scss">
 
-    .home {
-        min-height: 90vh;
-    }
 
 
 </style>
