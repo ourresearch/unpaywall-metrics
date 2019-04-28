@@ -53,6 +53,7 @@
         name: 'Journals',
         data: () => ({
            results: [],
+            search: '',
             headers: [
                 {text: "Journal name", value: "journal_name"},
                 {text: "Num DOIs", value: "num_dois"},

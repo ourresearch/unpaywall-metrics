@@ -7,7 +7,7 @@
       app
     >
       <v-list dense>
-        <v-list-tile href="/">
+        <v-list-tile to="/">
           <v-list-tile-action>
             <v-icon>home</v-icon>
           </v-list-tile-action>
@@ -16,7 +16,7 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile href="/">
+        <v-list-tile to="./journals">
           <v-list-tile-action>
             <v-icon>contact_mail</v-icon>
           </v-list-tile-action>
@@ -25,7 +25,7 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile href="/">
+        <v-list-tile to="./articles">
           <v-list-tile-action>
             <v-icon>contact_mail</v-icon>
           </v-list-tile-action>
@@ -46,7 +46,6 @@
       <v-container fluid fill-height>
         <v-layout
           justify-center
-          align-center
         >
 
           <router-view></router-view>

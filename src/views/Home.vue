@@ -15,8 +15,7 @@
                         </v-card-title>
 
                         <v-card-actions>
-                            <v-btn flat>Browse</v-btn>
-                            <v-btn flat>Search</v-btn>
+                            <v-btn to="./journals" flat>View Journals</v-btn>
                         </v-card-actions>
                     </v-card>
 
@@ -33,7 +32,7 @@
                         </v-card-title>
 
                         <v-card-actions>
-                            <v-btn flat>Search</v-btn>
+                            <v-btn flat to="./articles">Find Articles</v-btn>
                         </v-card-actions>
                     </v-card>
 
