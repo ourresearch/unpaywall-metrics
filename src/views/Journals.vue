@@ -14,41 +14,48 @@
         <v-layout>
             <v-card>
 
+                <v-card-title>
+                    <v-text-field
+                            v-model="search"
+                            append-icon="search"
+                            label="Search"
+                            single-line
+                            hide-details
+                    ></v-text-field>
+                </v-card-title>
+
 
                 <v-data-table
-                  :headers="headers"
-                  :items="results"
-                  class="elevation-1"
+                        :headers="headers"
+                        :items="results"
+                        class="elevation-1"
+                        :search="search"
                 >
-                  <template v-slot:items="props">
-                    <td >{{ props.item.journal_name }}</td>
-                    <td >{{ props.item.subscription_start_date }}</td>
-                    <td class="text-xs-right">{{ props.item.num_dois }}</td>
-                    <td class="text-xs-right">{{ parseInt(props.item.proportion_oa * 100) }}</td>
-                    <td class="text-xs-right">{{ parseInt(props.item.proportion_publisher_hosted * 100)}}</td>
-                    <td class="text-xs-right">{{ parseInt(props.item.proportion_repository_hosted * 100)}}</td>
-                  </template>
+                    <template v-slot:items="props">
+                        <td>{{ props.item.journal_name }}</td>
+                        <td>{{ props.item.subscription_start_date }}</td>
+                        <td class="text-xs-right">{{ props.item.num_dois }}</td>
+                        <td class="text-xs-right">{{ parseInt(props.item.proportion_oa * 100) }}</td>
+                        <td class="text-xs-right">{{ parseInt(props.item.proportion_publisher_hosted * 100)}}</td>
+                        <td class="text-xs-right">{{ parseInt(props.item.proportion_repository_hosted * 100)}}</td>
+                    </template>
                 </v-data-table>
 
 
-
-<!--                <v-list two-line>-->
-<!--                    <template v-for="(result, index) in results">-->
-<!--                        <v-list-tile :key="result.title">-->
-<!--                            <v-list-tile-content>-->
-<!--                                <v-list-tile-title v-html="result.journal_name"></v-list-tile-title>-->
-<!--                            </v-list-tile-content>-->
-<!--                        </v-list-tile>-->
-<!--                    </template>-->
-<!--                </v-list>-->
+                <!--                <v-list two-line>-->
+                <!--                    <template v-for="(result, index) in results">-->
+                <!--                        <v-list-tile :key="result.title">-->
+                <!--                            <v-list-tile-content>-->
+                <!--                                <v-list-tile-title v-html="result.journal_name"></v-list-tile-title>-->
+                <!--                            </v-list-tile-content>-->
+                <!--                        </v-list-tile>-->
+                <!--                    </template>-->
+                <!--                </v-list>-->
 
             </v-card>
 
 
-
         </v-layout>
-
-
 
 
     </div>
@@ -61,7 +68,7 @@
     export default {
         name: 'Journals',
         data: () => ({
-           results: [],
+            results: [],
             search: '',
             headers: [
                 {text: "Journal name", value: "journal_name"},
@@ -83,14 +90,14 @@
             ]
         }),
         methods: {
-            getCsv(){
+            getCsv() {
                 alert("coming soon!")
             },
-            getJson(){
+            getJson() {
                 alert("coming soon!")
             },
-            fetch(){
-               let url = "https://api.rickscafe.io/unpaywall-metrics/subscriptions?bigdeal=cdl_elsevier"
+            fetch() {
+                let url = "https://api.rickscafe.io/unpaywall-metrics/subscriptions?bigdeal=cdl_elsevier"
                 return axios.get(url)
                     .then(resp => {
                         console.log("got search results back", resp.data.list)
@@ -106,7 +113,7 @@
                     })
             }
         },
-        mounted(){
+        mounted() {
             this.fetch()
         }
     }
@@ -118,6 +125,7 @@
     table.v-table tbody {
         td {
             font-size: 16px;
+
             &:first-child {
                 padding-top: 10px;
                 padding-bottom: 10px;
