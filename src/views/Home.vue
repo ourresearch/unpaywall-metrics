@@ -43,6 +43,31 @@
 
             </v-layout>
 
+
+            <v-layout row>
+                <v-flex xs12>
+                    <v-card>
+                        <v-card-title>
+                            <h3 class="headline mb-0">Summary</h3>
+                        </v-card-title>
+                        <v-card-text>
+                            <div>There's just placeholder images here for now.</div>
+                            <img src="../assets/graph1.png" class="placeholder" alt="">
+                            <img src="../assets/graph2.png" class="placeholder" alt="">
+                            <img src="../assets/graph3.png" class="placeholder" alt="">
+
+                        </v-card-text>
+
+                    </v-card>
+
+
+                </v-flex>
+
+
+            </v-layout>
+
+
+
         </v-container>
 
 
@@ -61,6 +86,9 @@
 
 
 <style scoped lang="scss">
-
+    img.placeholder {
+        height: 200px;
+        padding: 20px;
+    }
 
 </style>
