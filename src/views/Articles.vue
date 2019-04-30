@@ -2,7 +2,7 @@
     <v-container>
         <v-layout row>
             <v-flex xs12>
-                <v-card>
+                <v-card min-height="200px">
 
                     <div class="header">
                         <v-text-field
@@ -32,94 +32,55 @@
                             <div class="line authors" v-if="result.z_authors">
                                 {{result.z_authors.map(function(x){return x.family}).join(", ")}}
                             </div>
-                            <div class="line oa">
+                            <v-layout row>
+                                <div class="oa-link publisher">
+                                    <v-btn :href="result.doi_url" class="publisher" v-if="result.publisherLocation">
+                                        <span class="text">
+                                            <i class="fas fa-unlock"></i>
+                                            Publisher fulltext
+                                        </span>
+                                    </v-btn>
+                                </div>
 
-                                    <v-chip color="orange" text-color="white" href="http://google.com">
-                                        <v-avatar>
-                                            <v-icon>unlock</v-icon>
-                                        </v-avatar>
-                                        Publisher fulltext
+                                <div class="oa-link repository" v-if="result.repositoryLocations.length">
+                                    <v-menu bottom left>
+                                        <template v-slot:activator="{ on }">
+                                            <v-btn
+                                                    v-on="on"
+                                            >
+                                                <span class="text">
+                                                    <i class="fas fa-unlock"></i>
+                                                    Repository fulltext
+                                                </span>
+                                            </v-btn>
+                                        </template>
+
+                                        <v-list>
+                                            <v-list-tile
+                                                    v-for="(loc, i) in result.repositoryLocations"
+                                                    :key="i"
+                                                    @click=""
+                                            >
+                                                <v-list-tile-title>
+                                                    <i class="fas fa-unlock"></i>
+                                                    {{ loc.url }}
+                                                </v-list-tile-title>
+                                            </v-list-tile>
+                                        </v-list>
+                                    </v-menu>
+
+                                </div>
 
 
-                                    </v-chip>
-
-
-                            </div>
-
-
+                            </v-layout>
                         </div>
-
-
                     </div>
-
-
                 </v-card>
-
-
             </v-flex>
-
-
         </v-layout>
-
-
     </v-container>
 
 
-    <!--    <div class="page journals">-->
-    <!--        <h1>Articles</h1>-->
-
-
-    <!--            <v-layout>-->
-
-
-    <!--                    <v-card>-->
-    <!--                        <v-text-field-->
-    <!--                                single-line-->
-    <!--                                v-model="search"-->
-    <!--                                append-icon="search"-->
-    <!--                                label="Search for articles"-->
-    <!--                                type="text"-->
-    <!--                                @click:append="fetch"-->
-    <!--                                @keyup.enter="fetch"-->
-
-
-    <!--                        ></v-text-field>-->
-
-
-    <!--                    </v-card>-->
-
-
-    <!--            </v-layout>-->
-
-    <!--            <v-layout>-->
-    <!--                <v-flex text-xs-center >-->
-    <!--                    <v-list two-line>-->
-    <!--                        <template v-for="result in results">-->
-    <!--                            <v-list-tile :key="result.doi">-->
-    <!--                                <v-list-tile-content>-->
-    <!--                                    <v-list-tile-content>-->
-    <!--                                        <v-list-tile-title>{{ result.title }}</v-list-tile-title>-->
-    <!--                                        <v-list-tile-sub-title class="text&#45;&#45;primary">-->
-    <!--                                            {{ result.year }}-->
-    <!--                                            {{ result.journal}}-->
-    <!--                                        </v-list-tile-sub-title>-->
-
-    <!--&lt;!&ndash;                                        <v-list-tile-sub-title>{{ result.z_authors.map(function(x){return x.family}).join(', ') }}</v-list-tile-sub-title>&ndash;&gt;-->
-    <!--                                    </v-list-tile-content>-->
-    <!--                                </v-list-tile-content>-->
-
-    <!--                            </v-list-tile>-->
-
-    <!--                        </template>-->
-
-
-    <!--                    </v-list>-->
-    <!--                </v-flex>-->
-
-    <!--            </v-layout>-->
-
-
-    <!--    </div>-->
 </template>
 
 
@@ -130,7 +91,7 @@
     export default {
         name: 'Articles',
         data: () => ({
-            results: [],
+            resultsRaw: [],
             search: '',
         }),
         computed: {
@@ -145,7 +106,19 @@
                 } else {
                     url = titleSearchUrl.replace("{}", this.search)
                 }
+
                 return url
+            },
+            results() {
+                return this.resultsRaw.map(r => {
+                    r.publisherLocation = r.oa_locations.find(x => {
+                        return x.host_type === "publisher"
+                    })
+                    r.repositoryLocations = r.oa_locations.filter(x => {
+                        return x.host_type === "repository"
+                    })
+                    return r
+                })
             }
         },
         methods: {
@@ -153,7 +126,7 @@
                 return axios.get(this.searchUrl)
                     .then(resp => {
                         console.log("got search results back", resp.data.list)
-                        this.results = resp.data.list
+                        this.resultsRaw = resp.data.list
                         return true
                     })
                     .catch(e => {
@@ -178,6 +151,9 @@
         .results {
             .result {
                 padding: 20px;
+                .line.oa {
+
+                }
             }
         }
     }
