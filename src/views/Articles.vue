@@ -17,6 +17,10 @@
                     </div>
 
                     <div class="results">
+                        <div class="no-results" v-show="searchHasHappened && !results.length">
+                            There are no articles matching "{{search}}" published by any of the <router-link to="./subscriptions">cancelled journals.</router-link>
+                        </div>
+
                         <div class="result" v-for="result in results">
                             <div class="title">
                                 {{result.title}}
@@ -93,6 +97,7 @@
         data: () => ({
             resultsRaw: [],
             search: '',
+            searchHasHappened: false
         }),
         computed: {
             searchUrl() {
@@ -127,10 +132,12 @@
                     .then(resp => {
                         console.log("got search results back", resp.data.list)
                         this.resultsRaw = resp.data.list
+                        this.searchHasHappened = true
                         return true
                     })
                     .catch(e => {
                         console.log("error from server", e)
+                        this.searchHasHappened = true
                         return false
                     })
             }
@@ -149,6 +156,10 @@
         }
 
         .results {
+            .no-results {
+                padding: 20px;
+            }
+
             .result {
                 padding: 20px;
                 .line.oa {

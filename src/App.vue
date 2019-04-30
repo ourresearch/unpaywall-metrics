@@ -74,9 +74,6 @@
         </v-layout>
       </v-container>
     </v-content>
-    <v-footer color="indigo" app inset>
-      <span class="white--text">Made with Unpaywall</span>
-    </v-footer>
   </v-app>
 
 

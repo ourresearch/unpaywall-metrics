@@ -12,7 +12,7 @@
 
 
         <v-layout>
-            <v-card>
+            <v-card v-show="results.length">
 
                 <v-card-title>
                     <v-text-field
