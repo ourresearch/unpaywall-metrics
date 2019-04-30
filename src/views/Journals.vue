@@ -1,6 +1,15 @@
 <template>
     <div class="page journals">
-        <h1>Journals page</h1>
+
+        <v-layout row>
+            <h1>Cancelled subscriptions</h1>
+            <v-spacer></v-spacer>
+            <v-btn @click="getCsv">CSV</v-btn>
+            <v-btn @click="getJson">JSON</v-btn>
+
+
+        </v-layout>
+
 
         <v-layout>
             <v-card>
@@ -13,6 +22,7 @@
                 >
                   <template v-slot:items="props">
                     <td >{{ props.item.journal_name }}</td>
+                    <td >{{ props.item.subscription_start_date }}</td>
                     <td class="text-xs-right">{{ props.item.num_dois }}</td>
                     <td class="text-xs-right">{{ parseInt(props.item.proportion_oa * 100) }}</td>
                     <td class="text-xs-right">{{ parseInt(props.item.proportion_publisher_hosted * 100)}}</td>
@@ -55,7 +65,8 @@
             search: '',
             headers: [
                 {text: "Journal name", value: "journal_name"},
-                {text: "Num DOIs", value: "num_dois"},
+                {text: "Content unavailable after", value: "subscription_start_date"},
+                {text: "Affected DOIs", value: "num_dois"},
                 {text: "Any OA (%)", value: "proportion_oa"},
                 {text: "Publisher OA (%)", value: "proportion_publisher_hosted"},
                 {text: "Repository OA (%)", value: "proportion_repository_hosted"}
@@ -72,6 +83,12 @@
             ]
         }),
         methods: {
+            getCsv(){
+                alert("coming soon!")
+            },
+            getJson(){
+                alert("coming soon!")
+            },
             fetch(){
                let url = "https://api.rickscafe.io/unpaywall-metrics/subscriptions?bigdeal=cdl_elsevier"
                 return axios.get(url)
