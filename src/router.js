@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home'
 import Journals from './views/Journals'
 import Articles from './views/Articles'
+import Faq from './views/Faq'
 import Meta from 'vue-meta'
 
 
@@ -18,8 +19,12 @@ export default new Router({
             component: Articles
         },
         {
-            path: '/journals',
+            path: '/subscriptions',
             component: Journals
+        },
+        {
+            path: '/faq',
+            component: Faq
         },
         {
             path: '/',

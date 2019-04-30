@@ -72,7 +72,7 @@
             search: '',
             headers: [
                 {text: "Journal name", value: "journal_name"},
-                {text: "Content unavailable after", value: "subscription_start_date"},
+                {text: "Cancelled since", value: "subscription_start_date"},
                 {text: "Affected DOIs", value: "num_dois"},
                 {text: "Any OA (%)", value: "proportion_oa"},
                 {text: "Publisher OA (%)", value: "proportion_publisher_hosted"},

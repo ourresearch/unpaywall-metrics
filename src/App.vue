@@ -1,45 +1,57 @@
 <template>
 
   <v-app id="inspire">
-    <v-navigation-drawer
-      fixed
-      v-model="drawer"
-      app
-    >
-      <v-list dense>
-        <v-list-tile to="/">
-          <v-list-tile-action>
-            <v-icon>home</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Home</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+<!--    <v-navigation-drawer-->
+<!--      fixed-->
+<!--      v-model="drawer"-->
+<!--      app-->
+<!--    >-->
+<!--      <v-list dense>-->
+<!--        <v-list-tile to="/">-->
+<!--          <v-list-tile-action>-->
+<!--            <v-icon>home</v-icon>-->
+<!--          </v-list-tile-action>-->
+<!--          <v-list-tile-content>-->
+<!--            <v-list-tile-title>Home</v-list-tile-title>-->
+<!--          </v-list-tile-content>-->
+<!--        </v-list-tile>-->
 
-        <v-list-tile to="./journals">
-          <v-list-tile-action>
-            <v-icon>contact_mail</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Journals</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+<!--        <v-list-tile to="./journals">-->
+<!--          <v-list-tile-action>-->
+<!--            <v-icon>contact_mail</v-icon>-->
+<!--          </v-list-tile-action>-->
+<!--          <v-list-tile-content>-->
+<!--            <v-list-tile-title>Journals</v-list-tile-title>-->
+<!--          </v-list-tile-content>-->
+<!--        </v-list-tile>-->
 
-        <v-list-tile to="./articles">
-          <v-list-tile-action>
-            <v-icon>contact_mail</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Articles</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+<!--        <v-list-tile to="./articles">-->
+<!--          <v-list-tile-action>-->
+<!--            <v-icon>contact_mail</v-icon>-->
+<!--          </v-list-tile-action>-->
+<!--          <v-list-tile-content>-->
+<!--            <v-list-tile-title>Articles</v-list-tile-title>-->
+<!--          </v-list-tile-content>-->
+<!--        </v-list-tile>-->
 
-      </v-list>
-    </v-navigation-drawer>
+<!--      </v-list>-->
+<!--    </v-navigation-drawer>-->
 
     <v-toolbar color="indigo" dark fixed app>
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>UC Elsevier cancellation browser</v-toolbar-title>
+      <v-toolbar-side-icon @click.stop="drawer = !drawer" class="hidden-sm-and-up"></v-toolbar-side-icon>
+      <v-toolbar-title>
+        <v-btn flat to="/" active-class="">
+        UC Elsevier cancellation browser
+
+        </v-btn>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items class="hidden-xs-only">
+        <v-btn flat to="./subscriptions">subscriptions</v-btn>
+        <v-btn flat to="./articles">articles</v-btn>
+        <v-btn flat to="./faq">faq</v-btn>
+      </v-toolbar-items>
+
     </v-toolbar>
 
     <v-content>
