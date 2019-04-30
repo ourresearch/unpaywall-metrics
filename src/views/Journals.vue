@@ -15,9 +15,8 @@
                     <td >{{ props.item.journal_name }}</td>
                     <td class="text-xs-right">{{ props.item.num_dois }}</td>
                     <td class="text-xs-right">{{ parseInt(props.item.proportion_oa * 100) }}</td>
-                    <td class="text-xs-right">{{ parseInt(props.item.proportion_bronze * 100)}}</td>
-                    <td class="text-xs-right">{{ parseInt(props.item.proportion_green * 100)}}</td>
-                    <td class="text-xs-right">{{ parseInt(props.item.proportion_hybrid * 100)}}</td>
+                    <td class="text-xs-right">{{ parseInt(props.item.proportion_publisher_hosted * 100)}}</td>
+                    <td class="text-xs-right">{{ parseInt(props.item.proportion_repository_hosted * 100)}}</td>
                   </template>
                 </v-data-table>
 
@@ -58,9 +57,8 @@
                 {text: "Journal name", value: "journal_name"},
                 {text: "Num DOIs", value: "num_dois"},
                 {text: "Any OA (%)", value: "proportion_oa"},
-                {text: "Bronze (%)", value: "proportion_bronze"},
-                {text: "Green (%)", value: "proportion_green"},
-                {text: "Hybrid (%)", value: "proportion_hybrid"}
+                {text: "Publisher OA (%)", value: "proportion_publisher_hosted"},
+                {text: "Repository OA (%)", value: "proportion_repository_hosted"}
             ],
 
 
