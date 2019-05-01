@@ -80,7 +80,7 @@
                                             <v-list-tile
                                                     v-for="(loc, i) in result.repositoryLocations"
                                                     :key="i"
-                                                    @click=""
+                                                    @click="visitLink(loc.url)"
                                             >
                                                 <v-list-tile-title>
                                                     <i class="fas fa-unlock"></i>
@@ -149,6 +149,9 @@
             },
             getJson() {
                 alert("coming soon!")
+            },
+            visitLink(url){
+                window.location.href = url
             },
             fetch() {
                 return axios.get(this.searchUrl)
