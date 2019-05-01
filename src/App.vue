@@ -37,7 +37,7 @@
 <!--      </v-list>-->
 <!--    </v-navigation-drawer>-->
 
-    <v-toolbar color="gold" dark fixed app>
+    <v-toolbar color="green" dark fixed app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer" class="hidden-sm-and-up"></v-toolbar-side-icon>
       <v-toolbar-title>
         <v-btn flat to="/" active-class="">
