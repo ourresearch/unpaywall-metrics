@@ -4,39 +4,27 @@
 
         <v-container grid-list-lg>
             <v-layout row wrap>
-                <v-flex md6>
+                <v-flex md12>
                     <v-card>
                         <v-card-title primary-title>
                             <div>
-                                <h3 class="headline mb-0">Journals</h3>
-                                <div> Lorem ipsum dolor sit amet, brute iriure accusata ne mea. Eos suavitate referrentur ad, te duo agam libris qualisque, utroque quaestio accommodare no qui. Et percipit laboramus usu, no invidunt verterem nominati mel. Dolorem ancillae an mei, ut putant invenire splendide mel, ea nec propriae adipisci. Ignota salutandi accusamus in sed, et per malis fuisset, qui id ludus appareat
+                                <h3 class="headline mb-0">About this website</h3>
+                                <div> CDL content goes here. Until then, some <a href="https://hipsum.co/?paras=5&type=hipster-centric&start-with-lorem=1">Hipster Ipsum:</a>  Lorem ipsum dolor amet scenester man bun synth semiotics vexillologist. Cred gluten-free venmo beard kitsch, cardigan edison bulb single-origin coffee meditation blog flexitarian kickstarter tote bag chartreuse. Green juice lumbersexual try-hard shabby chic, YOLO austin before they sold out gentrify roof party hell of hexagon trust fund brooklyn art party freegan. Hoodie copper mug small batch gastropub polaroid. Messenger bag beard shoreditch stumptown waistcoat 90's vice. Blog art party banh mi, mixtape humblebrag green juice vice four loko cliche brooklyn live-edge distillery pabst plaid dreamcatcher. Tousled sustainable chartreuse locavore, lumbersexual pickled forage intelligentsia schlitz lo-fi lomo.
+
                                 </div>
                             </div>
                         </v-card-title>
 
                         <v-card-actions>
-                            <v-btn to="./journals" flat>View Journals</v-btn>
-                        </v-card-actions>
-                    </v-card>
-
-                </v-flex>
-
-                <v-flex md6>
-                    <v-card>
-                        <v-card-title primary-title>
-                            <div>
-                                <h3 class="headline mb-0">Articles</h3>
-                                <div> Lorem ipsum dolor sit amet, brute iriure accusata ne mea. Eos suavitate referrentur ad, te duo agam libris qualisque, utroque quaestio accommodare no qui. Et percipit laboramus usu, no invidunt verterem nominati mel. Dolorem ancillae an mei, ut putant invenire splendide mel, ea nec propriae adipisci. Ignota salutandi accusamus in sed, et per malis fuisset, qui id ludus appareat
-                                </div>
-                            </div>
-                        </v-card-title>
-
-                        <v-card-actions>
+                            <v-btn to="./subscriptions" flat>View Journals</v-btn>
                             <v-btn flat to="./articles">Find Articles</v-btn>
+                            <v-btn flat to="./faq">Read FAQ</v-btn>
+
                         </v-card-actions>
                     </v-card>
 
                 </v-flex>
+
 
 
 

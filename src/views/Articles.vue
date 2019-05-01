@@ -1,5 +1,13 @@
 <template>
     <v-container>
+                <v-layout row>
+            <h1>Affected articles</h1>
+            <v-spacer></v-spacer>
+            <v-btn @click="getCsv">CSV</v-btn>
+            <v-btn @click="getJson">JSON</v-btn>
+
+
+        </v-layout>
         <v-layout row>
             <v-flex xs12>
                 <v-card min-height="200px">
@@ -17,9 +25,18 @@
                     </div>
 
                     <div class="results">
-                        <div class="no-results" v-show="searchHasHappened && !results.length">
-                            There are no articles matching "{{search}}" published by any of the <router-link to="./subscriptions">cancelled journals.</router-link>
+                        <div class="header" v-show="searchHasHappened">
+                            <div class="no-results" v-show="!results.length">
+                                There are no articles matching "{{search}}" published by any of the <router-link to="./subscriptions">cancelled journals.</router-link>
+                            </div>
+                            <div class="results-meta" v-show="results.length">
+                                <span>Showing</span>
+
+                                 {{ results.length }} affected articles
+                            </div>
+
                         </div>
+
 
                         <div class="result" v-for="result in results">
                             <div class="title">
@@ -127,6 +144,12 @@
             }
         },
         methods: {
+            getCsv() {
+                alert("coming soon!")
+            },
+            getJson() {
+                alert("coming soon!")
+            },
             fetch() {
                 return axios.get(this.searchUrl)
                     .then(resp => {
@@ -156,7 +179,7 @@
         }
 
         .results {
-            .no-results {
+            .header {
                 padding: 20px;
             }
 
