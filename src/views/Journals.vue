@@ -35,9 +35,9 @@
                         <td>{{ props.item.journal_name }}</td>
                         <td>{{ props.item.subscription_start_date }}</td>
                         <td class="text-xs-right">{{ props.item.num_dois }}</td>
-                        <td class="text-xs-right">{{ parseInt(props.item.proportion_oa * 100) }}</td>
-                        <td class="text-xs-right">{{ parseInt(props.item.proportion_publisher_hosted * 100)}}</td>
-                        <td class="text-xs-right">{{ parseInt(props.item.proportion_repository_hosted * 100)}}</td>
+                        <td class="text-xs-right">{{ parseInt(props.item.proportion_oa * 100) }}%</td>
+                        <td class="text-xs-right">{{ parseInt(props.item.proportion_publisher_hosted * 100)}}%</td>
+                        <td class="text-xs-right">{{ parseInt(props.item.proportion_repository_hosted * 100)}}%</td>
                     </template>
                 </v-data-table>
 
@@ -77,16 +77,6 @@
                 {text: "Publisher OA (%)", value: "proportion_publisher_hosted"},
                 {text: "Repository OA (%)", value: "proportion_repository_hosted"}
             ],
-
-
-            headers1: [
-                "Journal name",
-                "Num DOIs",
-                "Total OA (%)",
-                "Bronze (%)",
-                "Green (%)",
-                "Hybrid (%)"
-            ]
         }),
         methods: {
             getCsv() {
