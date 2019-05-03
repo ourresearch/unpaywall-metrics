@@ -11,7 +11,6 @@
         </v-layout>
 
 
-        <v-layout>
             <v-card v-show="results.length">
 
                 <v-card-title>
@@ -56,7 +55,6 @@
             </v-card>
 
 
-        </v-layout>
 
 
     </div>
@@ -122,7 +120,14 @@
 
 
 <style scoped lang="scss">
+    .page.journals {
+        width: 100%;
+        max-width: 1200px;
 
+    }
+
+    table {
+    }
     table.v-table tbody {
         td {
             font-size: 16px;
