@@ -30,6 +30,7 @@
                         :items="results"
                         class="elevation-1"
                         :search="search"
+                        hide-actions
                 >
                     <template v-slot:items="props">
                         <td>{{ props.item.journal_name }}</td>
