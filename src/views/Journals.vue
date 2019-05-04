@@ -11,50 +11,56 @@
         </v-layout>
 
 
-            <v-card v-show="results.length">
+        <v-card>
 
-                <v-card-title>
-                    <v-text-field
-                            v-model="search"
-                            append-icon="search"
-                            label="Search"
-                            single-line
-                            hide-details
-                    ></v-text-field>
-                </v-card-title>
-
-
-                <v-data-table
-                        :headers="headers"
-                        :items="results"
-                        class="elevation-1"
-                        :search="search"
-                        hide-actions
-                >
-                    <template v-slot:items="props">
-                        <td>{{ props.item.journal_name }}</td>
-                        <td>{{ props.item.subscription_start_date }}</td>
-                        <td class="text-xs-right">{{ props.item.num_dois }}</td>
-                        <td class="text-xs-right">{{ parseInt(props.item.proportion_oa * 100) }}%</td>
-                        <td class="text-xs-right">{{ parseInt(props.item.proportion_publisher_hosted * 100)}}%</td>
-                        <td class="text-xs-right">{{ parseInt(props.item.proportion_repository_hosted * 100)}}%</td>
-                    </template>
-                </v-data-table>
+            <v-card-title>
+                <v-text-field
+                        v-model="search"
+                        append-icon="search"
+                        label="Search"
+                        single-line
+                        hide-details
+                ></v-text-field>
+            </v-card-title>
 
 
-                <!--                <v-list two-line>-->
-                <!--                    <template v-for="(result, index) in results">-->
-                <!--                        <v-list-tile :key="result.title">-->
-                <!--                            <v-list-tile-content>-->
-                <!--                                <v-list-tile-title v-html="result.journal_name"></v-list-tile-title>-->
-                <!--                            </v-list-tile-content>-->
-                <!--                        </v-list-tile>-->
-                <!--                    </template>-->
-                <!--                </v-list>-->
+            <v-data-table
+                    :headers="headers"
+                    :items="results"
+                    class="elevation-1"
+                    hide-actions
+                     v-show="results.length"
+            >
+                <template v-slot:items="props">
+                    <td>
+                            <span class="journal-title">
+                                {{ props.item.journal_name }}
+                            </span>
+                        <span class="issns">
+                                {{props.item.issns.join(", ")}}
+                            </span>
 
-            </v-card>
+                    </td>
+                    <td>{{ props.item.subscription_start_date }}</td>
+                    <td class="text-xs-right">{{ props.item.num_dois }}</td>
+                    <td class="text-xs-right">{{ parseInt(props.item.proportion_oa * 100) }}%</td>
+                    <td class="text-xs-right">{{ parseInt(props.item.proportion_publisher_hosted * 100)}}%</td>
+                    <td class="text-xs-right">{{ parseInt(props.item.proportion_repository_hosted * 100)}}%</td>
+                </template>
+            </v-data-table>
 
 
+            <!--                <v-list two-line>-->
+            <!--                    <template v-for="(result, index) in results">-->
+            <!--                        <v-list-tile :key="result.title">-->
+            <!--                            <v-list-tile-content>-->
+            <!--                                <v-list-tile-title v-html="result.journal_name"></v-list-tile-title>-->
+            <!--                            </v-list-tile-content>-->
+            <!--                        </v-list-tile>-->
+            <!--                    </template>-->
+            <!--                </v-list>-->
+
+        </v-card>
 
 
     </div>
@@ -67,7 +73,7 @@
     export default {
         name: 'Journals',
         data: () => ({
-            results: [],
+            rawResults: [],
             search: '',
             headers: [
                 {text: "Journal name", value: "journal_name"},
@@ -78,6 +84,21 @@
                 {text: "Repository OA (%)", value: "proportion_repository_hosted"}
             ],
         }),
+        computed: {
+            results() {
+                return this.rawResults.filter(x => {
+                    if (!this.search) {
+                        return true
+                    } else if (x.issns.join().indexOf(this.search) > -1) {
+                        return true
+                    } else if (x.journal_name.indexOf(this.search) > -1) {
+                        return true
+                    } else {
+                        return false
+                    }
+                })
+            }
+        },
         methods: {
             getCsv() {
                 alert("coming soon!")
@@ -85,15 +106,18 @@
             getJson() {
                 alert("coming soon!")
             },
+            myFilter(searchTerm) {
+                console.log("calling myFilter", searchTerm)
+                return false
+            },
             fetch() {
                 let url = "https://api.rickscafe.io/unpaywall-metrics/subscriptions?bigdeal=cdl_elsevier"
                 return axios.get(url)
                     .then(resp => {
-                        console.log("got search results back", resp.data.list)
 
                         // use the nifty spread operator since push() requires multiple args
                         // rather than a single array https://stackoverflow.com/a/1374131/226013
-                        this.results = resp.data.list
+                        this.rawResults = resp.data.list
                         return true
                     })
                     .catch(e => {
@@ -118,9 +142,16 @@
 
     table {
     }
+
     table.v-table tbody {
         td {
             font-size: 16px;
+
+            .issns {
+                display: block;
+                font-size: 11px;
+                opacity: .6;
+            }
 
             &:first-child {
                 padding-top: 10px;
