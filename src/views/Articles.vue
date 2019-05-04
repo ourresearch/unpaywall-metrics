@@ -11,29 +11,43 @@
         <v-layout row>
             <v-flex xs12>
                 <v-card min-height="200px">
+                    <div class="search-inputs">
+                        <v-layout>
+                            <v-flex sm9>
+                                <v-text-field
+                                        single-line
+                                        v-model="search"
+                                        append-icon="search"
+                                        label="Search by title or DOI"
+                                        type="text"
+                                ></v-text-field>
+                            </v-flex>
+                        </v-layout>
+                        <v-layout class="align-center">
+                                <v-switch
+                                        v-model="oaOnly"
+                                        label="Show only articles with OA copies"
+                                ></v-switch>
+                        </v-layout>
 
-                    <div class="header">
-                        <v-text-field
-                                single-line
-                                v-model="search"
-                                append-icon="search"
-                                label="Search for articles"
-                                type="text"
-                                @click:append="fetch"
-                                @keyup.enter="fetch"
-                        ></v-text-field>
                     </div>
+
+                    <v-divider></v-divider>
 
                     <div class="results">
                         <div class="header" v-show="searchHasHappened">
-                            <div class="no-results" v-show="!results.length">
-                                There are no articles matching "{{search}}" published by any of the <router-link to="./subscriptions">cancelled journals.</router-link>
-                            </div>
-                            <div class="results-meta" v-show="results.length">
-                                <span>Showing</span>
 
-                                 {{ results.length }} affected articles
+                            <div class="descr">
+                                <div class="no-results" v-show="!results.length">
+                                    There are no articles matching "{{search}}" published by any of the <router-link to="./subscriptions">cancelled journals.</router-link>
+                                </div>
+                                <div class="results-meta" v-show="results.length">
+<!--                                    <span>Showing</span>-->
+
+<!--                                     {{ results.length }}  articles-->
+                                </div>
                             </div>
+
 
                         </div>
 
@@ -54,26 +68,39 @@
                                 {{result.z_authors.map(function(x){return x.family}).join(", ")}}
                             </div>
                             <v-layout row>
-                                <div class="oa-link publisher">
-                                    <v-btn :href="result.doi_url" class="publisher" v-if="result.publisherLocation">
+
+
+<!--                                NO LINK-->
+                                <div class="oa-link toll-access" v-if="!result.is_oa">
+                                    <i class="fas fa-lock"></i>
+                                    No OA copy found
+                                </div>
+
+
+
+<!--                                PUBLISHER LINK-->
+                                <div class="oa-link publisher" v-if="result.publisherLocation">
+                                    <a :href="result.doi_url" class="fulltext-link publisher">
                                         <span class="text">
                                             <i class="fas fa-unlock"></i>
                                             Publisher fulltext
                                         </span>
-                                    </v-btn>
+                                    </a>
                                 </div>
 
+<!--                                REPOSITORY LINK-->
                                 <div class="oa-link repository" v-if="result.repositoryLocations.length">
                                     <v-menu bottom left>
                                         <template v-slot:activator="{ on }">
-                                            <v-btn
+                                            <span
                                                     v-on="on"
+                                                    class="fulltext-link repository"
                                             >
                                                 <span class="text">
                                                     <i class="fas fa-unlock"></i>
                                                     Repository fulltext
                                                 </span>
-                                            </v-btn>
+                                            </span>
                                         </template>
 
                                         <v-list>
@@ -107,6 +134,7 @@
 
 <script>
     import axios from 'axios'
+    import _ from 'lodash'
 
 
     export default {
@@ -114,22 +142,19 @@
         data: () => ({
             resultsRaw: [],
             search: '',
-            searchHasHappened: false
+            searchHasHappened: false,
+            oaOnly: false
         }),
         computed: {
             searchUrl() {
-                let doiSearchUrl = "https://api.rickscafe.io/unpaywall-metrics/article/doi/{}"
 
-                let titleSearchUrl = "https://api.rickscafe.io/unpaywall-metrics/articles/title/{}?bigdeal=cdl_elsevier"
+                let host = "none"
+                if (this.oaOnly) host = "any"
 
-                let url
-                if (this.search.indexOf("10.") === 0) {
-                    url = doiSearchUrl.replace("{}", this.search)
-                } else {
-                    url = titleSearchUrl.replace("{}", this.search)
-                }
+                return "https://rickscafe-api.herokuapp.com/unpaywall-metrics/articles?q={q}&oa_host={host}"
+                    .replace("{q}", this.search)
+                    .replace("{host}", host)
 
-                return url
             },
             results() {
                 return this.resultsRaw.map(r => {
@@ -154,22 +179,36 @@
                 window.location.href = url
             },
             fetch() {
+                this.searching = true
+                console.log("fetching!", this.search, this.oaHost)
                 return axios.get(this.searchUrl)
                     .then(resp => {
                         console.log("got search results back", resp.data.list)
                         this.resultsRaw = resp.data.list
                         this.searchHasHappened = true
+                        this.searching = false
                         return true
                     })
                     .catch(e => {
                         console.log("error from server", e)
                         this.searchHasHappened = true
+                        this.searching = false
                         return false
                     })
             }
+
         },
         mounted() {
-            // this.fetch()
+            this.fetch()
+        },
+        watch: {
+            oaOnly: function(newVal){
+                console.log("oaOnly changed")
+                this.fetch()
+            },
+            search: _.debounce(function(newVal){
+              this.fetch()
+            }, 250),
         }
     }
 </script>
@@ -177,19 +216,41 @@
 
 <style scoped lang="scss">
     .v-card {
-        .header {
-            padding: 20px;
+        .search-inputs {
+            padding: 20px 20px 0;
         }
 
         .results {
             .header {
-                padding: 20px;
+                padding: 0 20px;
             }
 
             .result {
                 padding: 20px;
-                .line.oa {
+                .oa-link {
+                    display: block;
+                    border-radius: 20px;
+                    padding: 3px 15px;
+                    color: #fff;
+                    margin-right: 10px;
+                    font-size: 14px;
+                    &.repository {
+                        background: #4CAF50;
+                        cursor: pointer;
+                    }
+                    &.publisher {
+                        background: #FF8F00;
+                        cursor: pointer;
+                    }
+                    &.toll-access {
+                        background: #eee;
+                        color: #777;
+                    }
 
+                    a {
+                        color: #fff;
+                        text-decoration: #fff;
+                    }
                 }
             }
         }
