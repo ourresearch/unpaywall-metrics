@@ -14,20 +14,36 @@
         <v-card>
 
             <v-card-title>
-                <v-text-field
-                        v-model="search"
-                        append-icon="search"
-                        label="Search"
-                        single-line
-                        hide-details
-                ></v-text-field>
+
+                <v-flex sm6>
+                    <v-text-field
+                            v-model="search"
+                            append-icon="search"
+                            label="Search"
+                            single-line
+                            hide-details
+                    ></v-text-field>
+
+                </v-flex>
+
+
             </v-card-title>
+            <div class="state-info">
+                <div class="loading state" v-show="!rawResults.length">
+                      <v-progress-linear :indeterminate="true" color="green"></v-progress-linear>
+
+                </div>
+                <div class="no-results state" v-show="rawResults.length && !results.length">
+                    No matches found for "{{search}}"
+                </div>
+
+            </div>
 
 
             <v-data-table
                     :headers="headers"
                     :items="results"
-                    class="elevation-1"
+                    class="elevation-1 main-table"
                     hide-actions
                      v-show="results.length"
             >
@@ -140,7 +156,9 @@
 
     }
 
-    table {
+
+    div.state-info {
+        padding: 20px 20px;
     }
 
     table.v-table tbody {
