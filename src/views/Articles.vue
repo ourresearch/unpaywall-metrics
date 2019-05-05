@@ -1,6 +1,6 @@
 <template>
     <v-container>
-                <v-layout row>
+        <v-layout row>
             <h1>Affected articles</h1>
             <v-spacer></v-spacer>
             <v-btn @click="getCsv">CSV</v-btn>
@@ -24,10 +24,10 @@
                             </v-flex>
                         </v-layout>
                         <v-layout class="align-center">
-                                <v-switch
-                                        v-model="oaOnly"
-                                        label="Show only articles with OA copies"
-                                ></v-switch>
+                            <v-switch
+                                    v-model="oaOnly"
+                                    label="Show only articles with OA copies"
+                            ></v-switch>
                         </v-layout>
 
                     </div>
@@ -39,12 +39,13 @@
 
                             <div class="descr">
                                 <div class="no-results" v-show="!results.length">
-                                    There are no articles matching "{{search}}" published by any of the <router-link to="./subscriptions">cancelled journals.</router-link>
+                                    There are no articles matching "{{search}}" published by any of the
+                                    <router-link to="./subscriptions">cancelled journals.</router-link>
                                 </div>
                                 <div class="results-meta" v-show="results.length">
-<!--                                    <span>Showing</span>-->
+                                    <!--                                    <span>Showing</span>-->
 
-<!--                                     {{ results.length }}  articles-->
+                                    <!--                                     {{ results.length }}  articles-->
                                 </div>
                             </div>
 
@@ -70,15 +71,14 @@
                             <v-layout row>
 
 
-<!--                                NO LINK-->
+                                <!--                                NO LINK-->
                                 <div class="oa-link toll-access" v-if="!result.is_oa">
                                     <i class="fas fa-lock"></i>
                                     No OA copy found
                                 </div>
 
 
-
-<!--                                PUBLISHER LINK-->
+                                <!--                                PUBLISHER LINK-->
                                 <div class="oa-link publisher" v-if="result.publisherLocation">
                                     <a :href="result.doi_url" class="fulltext-link publisher">
                                         <span class="text">
@@ -88,7 +88,7 @@
                                     </a>
                                 </div>
 
-<!--                                REPOSITORY LINK-->
+                                <!--                                REPOSITORY LINK-->
                                 <div class="oa-link repository" v-if="result.repositoryLocations.length">
                                     <v-menu bottom left>
                                         <template v-slot:activator="{ on }">
@@ -175,7 +175,7 @@
             getJson() {
                 alert("coming soon!")
             },
-            visitLink(url){
+            visitLink(url) {
                 window.location.href = url
             },
             fetch() {
@@ -199,15 +199,31 @@
 
         },
         mounted() {
+            let q = this.$route.query.q
+            if (q) {
+                console.log("query:", q)
+                this.search = q
+            }
+
             this.fetch()
         },
         watch: {
-            oaOnly: function(newVal){
+            oaOnly: function (newVal) {
                 console.log("oaOnly changed")
                 this.fetch()
             },
-            search: _.debounce(function(newVal){
-              this.fetch()
+            search: _.debounce(function (newVal) {
+                this.fetch()
+                let queryObj
+                if (this.search === "") {
+                    queryObj = {}
+                }
+                else {
+                    queryObj = {q: this.search}
+                }
+
+                this.$router.push({query: queryObj})
+
             }, 250),
         }
     }
@@ -227,6 +243,7 @@
 
             .result {
                 padding: 20px;
+
                 .oa-link {
                     display: block;
                     border-radius: 20px;
@@ -234,14 +251,17 @@
                     color: #fff;
                     margin-right: 10px;
                     font-size: 14px;
+
                     &.repository {
                         background: #4CAF50;
                         cursor: pointer;
                     }
+
                     &.publisher {
                         background: #FF8F00;
                         cursor: pointer;
                     }
+
                     &.toll-access {
                         background: #eee;
                         color: #777;
