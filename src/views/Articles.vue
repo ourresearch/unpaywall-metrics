@@ -1,10 +1,30 @@
 <template>
     <v-flex>
-        <v-layout row>
+        <v-layout row align-baseline>
             <h1>Affected articles</h1>
             <v-spacer></v-spacer>
-            <v-btn @click="getCsv">CSV</v-btn>
-            <v-btn @click="getJson">JSON</v-btn>
+            <v-menu offset-y>
+                <template v-slot:activator="{ on }">
+                    <v-btn
+                            small
+                            flat
+                            v-on="on"
+                    >
+                        <div>Export <i class="fas fa-file-export"></i></div>
+
+                    </v-btn>
+                </template>
+                <v-list>
+                    <v-list-tile @click="getCsv">
+                        <v-list-tile-title>Download full dataset (CSV)</v-list-tile-title>
+                    </v-list-tile>
+                    <v-list-tile @click="getJson">
+                        <v-list-tile-title>View current page in API (JSON)</v-list-tile-title>
+                    </v-list-tile>
+                </v-list>
+            </v-menu>
+
+
 
 
         </v-layout>
@@ -13,18 +33,18 @@
                 <v-card min-height="200px">
                     <div class="search-inputs">
                         <v-layout align-center>
-<!--                            <v-flex shrink  class="search-type" v-show="search">-->
-<!--                                <span v-show="searchType=='doi'">-->
-<!--                                    DOI:-->
-<!--                                </span>-->
-<!--                                <span v-show="searchType=='issn'">-->
-<!--                                    ISSN:-->
-<!--                                </span>-->
-<!--                                <span v-show="searchType=='string'">-->
-<!--                                    Title:-->
-<!--                                </span>-->
+                            <!--                            <v-flex shrink  class="search-type" v-show="search">-->
+                            <!--                                <span v-show="searchType=='doi'">-->
+                            <!--                                    DOI:-->
+                            <!--                                </span>-->
+                            <!--                                <span v-show="searchType=='issn'">-->
+                            <!--                                    ISSN:-->
+                            <!--                                </span>-->
+                            <!--                                <span v-show="searchType=='string'">-->
+                            <!--                                    Title:-->
+                            <!--                                </span>-->
 
-<!--                            </v-flex>-->
+                            <!--                            </v-flex>-->
                             <v-flex grow>
                                 <v-text-field
                                         single-line
@@ -47,7 +67,7 @@
 
                     <v-divider></v-divider>
 
-                    <div class="results"  :class="{loading: loading}">
+                    <div class="results" :class="{loading: loading}">
                         <div class="header" v-show="searchHasHappened">
                             <div class="descr">
                                 <div class="no-results" v-show="!results.length">
@@ -74,12 +94,7 @@
                                     <span v-show="results.length > 1" class="sort">(most recent first)</span>
 
 
-
-
                                 </div>
-
-
-
 
 
                             </div>
@@ -143,8 +158,8 @@
                                                     @click="visitLink(loc.url)"
                                             >
                                                 <v-list-tile-title>
-                                                    <i class="fas fa-unlock"></i>
-                                                    {{ loc.url }}
+                                                    Hosted by
+                                                    {{ loc.hostName }}
                                                 </v-list-tile-title>
                                             </v-list-tile>
                                         </v-list>
@@ -161,7 +176,8 @@
                         <v-btn class="ma-4"
                                v-show="serverHasMoreResults"
                                @click="fetchNextResultsPage"
-                               color="primary">Show more results</v-btn>
+                               color="primary">Show more results
+                        </v-btn>
                     </v-layout>
 
 
@@ -177,6 +193,7 @@
 <script>
     import axios from 'axios'
     import _ from 'lodash'
+    import {hosts} from "../hosts";
 
 
     export default {
@@ -188,7 +205,8 @@
             oaOnly: false,
             resultsPage: 1,
             resultsTotalCount: 0,
-            loading: false
+            loading: false,
+            hosts: hosts
         }),
         computed: {
             searchUrl() {
@@ -202,7 +220,7 @@
                     .replace("{page}", this.resultsPage)
 
             },
-            serverHasMoreResults(){
+            serverHasMoreResults() {
                 return this.resultsTotalCount > this.resultsRaw.length
             },
             results() {
@@ -213,19 +231,28 @@
                     r.repositoryLocations = r.oa_locations.filter(x => {
                         return x.host_type === "repository"
                     })
+
+                    r.oa_locations.filter(x => x.endpoint_id).map(x => {
+                        if (hosts[x.endpoint_id]){
+                            x.hostName = hosts[x.endpoint_id].institution_name
+                        }
+                        else {
+                            x.hostName = x.url
+                        }
+                    })
+
+
                     return r
                 })
             },
-            searchType(){
+            searchType() {
                 let issnRe = /^\d{4}-\d{4}$/
                 let doiRe = /^10\..+/
-                if (issnRe.test(this.search)){
+                if (issnRe.test(this.search)) {
                     return "issn"
-                }
-                else if (doiRe.test(this.search)) {
+                } else if (doiRe.test(this.search)) {
                     return "doi"
-                }
-                else {
+                } else {
                     return "string"
                 }
             }
@@ -240,7 +267,7 @@
             visitLink(url) {
                 window.location.href = url
             },
-            fetchNextResultsPage(){
+            fetchNextResultsPage() {
                 this.resultsPage += 1
                 this.fetch(true)
             },
@@ -250,10 +277,9 @@
                 return axios.get(this.searchUrl)
                     .then(resp => {
                         console.log("got search results back", resp.data.list)
-                        if (append){
+                        if (append) {
                             this.resultsRaw.push(...resp.data.list)
-                        }
-                        else {
+                        } else {
                             this.resultsRaw = resp.data.list
                         }
                         this.resultsTotalCount = resp.data.total_count
@@ -289,8 +315,7 @@
                 let queryObj
                 if (this.search === "") {
                     queryObj = {}
-                }
-                else {
+                } else {
                     queryObj = {q: this.search}
                 }
 
@@ -306,11 +331,13 @@
     .v-card {
         .search-inputs {
             padding: 40px 20px 0;
+
             .search-type {
                 padding: 10px;
                 font-weight: bold;
                 font-size: 22px;
             }
+
             .v-input {
                 font-size: 22px !important;
             }
@@ -320,6 +347,7 @@
             &.loading {
                 opacity: .5;
             }
+
             .header {
                 padding: 20px;
             }

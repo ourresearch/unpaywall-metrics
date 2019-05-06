@@ -1,41 +1,6 @@
 <template>
 
   <v-app id="inspire">
-<!--    <v-navigation-drawer-->
-<!--      fixed-->
-<!--      v-model="drawer"-->
-<!--      app-->
-<!--    >-->
-<!--      <v-list dense>-->
-<!--        <v-list-tile to="/">-->
-<!--          <v-list-tile-action>-->
-<!--            <v-icon>home</v-icon>-->
-<!--          </v-list-tile-action>-->
-<!--          <v-list-tile-content>-->
-<!--            <v-list-tile-title>Home</v-list-tile-title>-->
-<!--          </v-list-tile-content>-->
-<!--        </v-list-tile>-->
-
-<!--        <v-list-tile to="./journals">-->
-<!--          <v-list-tile-action>-->
-<!--            <v-icon>contact_mail</v-icon>-->
-<!--          </v-list-tile-action>-->
-<!--          <v-list-tile-content>-->
-<!--            <v-list-tile-title>Journals</v-list-tile-title>-->
-<!--          </v-list-tile-content>-->
-<!--        </v-list-tile>-->
-
-<!--        <v-list-tile to="./articles">-->
-<!--          <v-list-tile-action>-->
-<!--            <v-icon>contact_mail</v-icon>-->
-<!--          </v-list-tile-action>-->
-<!--          <v-list-tile-content>-->
-<!--            <v-list-tile-title>Articles</v-list-tile-title>-->
-<!--          </v-list-tile-content>-->
-<!--        </v-list-tile>-->
-
-<!--      </v-list>-->
-<!--    </v-navigation-drawer>-->
 
     <v-toolbar color="green" dark fixed app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer" class="hidden-sm-and-up"></v-toolbar-side-icon>
@@ -62,18 +27,26 @@
 
           <router-view></router-view>
 
-<!--          <v-flex text-xs-center>-->
-<!--            <v-tooltip left>-->
-<!--              <v-btn icon large :href="source" target="_blank" slot="activator">-->
-<!--                <v-icon large>code</v-icon>-->
-<!--              </v-btn>-->
-<!--              <span>Source</span>-->
-<!--            </v-tooltip>-->
-<!--          </v-flex>-->
 
         </v-layout>
       </v-container>
     </v-content>
+    <v-footer
+    height="auto"
+    color="green">
+      <div class="pa-4 white--text">
+        <div>
+          <strong>Open data!</strong> This app is built on data from <a href="https://unpaywall.org">Unpaywall</a>.
+        </div>
+        <div>
+          <strong>Open source!</strong> Code is <a href="https://github.com/Impactstory/unpaywall-metrics">here (frontend)</a> and <a
+                href="https://github.com/Impactstory/rickscafe-api">here (API)</a>.
+        </div>
+        <div>Built by <a href="https://impactstory.org">Impactstory</a>, with funding from <a href="https://www.cdlib.org/">CDL</a>.</div>
+
+      </div>
+
+    </v-footer>
   </v-app>
 
 
@@ -101,7 +74,7 @@
 
 <style lang="scss">
 
-  @import url("https://use.fontawesome.com/releases/v5.0.10/css/all.css");
+  @import url("https://use.fontawesome.com/releases/v5.8.1/css/all.css");
   @import url("https://fonts.googleapis.com/css?family=Lato:300,400,700,400italic");
 
 
@@ -127,6 +100,9 @@
     font-family: Lato, sans-serif;
     &.noscroll {
       overflow: hidden
+    }
+    .white--text a {
+      color: #fff;
     }
   }
 
