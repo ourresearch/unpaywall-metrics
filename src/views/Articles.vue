@@ -47,7 +47,7 @@
 
                     <v-divider></v-divider>
 
-                    <div class="results" :class="{loading: searching}">
+                    <div class="results"  :class="{loading: loading}">
                         <div class="header" v-show="searchHasHappened">
                             <div class="descr">
                                 <div class="no-results" v-show="!results.length">
@@ -57,16 +57,22 @@
                                 <div class="results-meta" v-show="results.length">
                                     Showing
 
-                                    <span v-show="results.length % 20 !== 0" class="all">all</span>
+                                    <span v-show="!serverHasMoreResults" class="all">all</span>
 
                                     {{ results.length }}
 
-                                    <span v-show="results.length % 20 === 0" class="many">of many</span>
+                                    <span v-show="serverHasMoreResults" class="total-count">of {{resultsTotalCount.toLocaleString()}}</span>
 
                                     articles
 
-                                    <span v-show="search" class="search-is-dirty">matching "{{search}}"</span>
-                                    (most recent first)
+                                    <span v-show="search" class="search-is-dirty">
+                                        matching
+                                        <span v-show="searchType=='issn'" class="issn">ISSN</span>
+                                        <span v-show="searchType=='doi'" class="doi">DOI</span>
+                                        "{{search}}"
+                                    </span>
+                                    <span v-show="results.length > 1" class="sort">(most recent first)</span>
+
 
 
 
@@ -153,6 +159,7 @@
 
                     <v-layout justify-center class="show-more">
                         <v-btn class="ma-4"
+                               v-show="serverHasMoreResults"
                                @click="fetchNextResultsPage"
                                color="primary">Show more results</v-btn>
                     </v-layout>
@@ -179,7 +186,9 @@
             search: '',
             searchHasHappened: false,
             oaOnly: false,
-            resultsPage: 1
+            resultsPage: 1,
+            resultsTotalCount: 0,
+            loading: false
         }),
         computed: {
             searchUrl() {
@@ -192,6 +201,9 @@
                     .replace("{host}", host)
                     .replace("{page}", this.resultsPage)
 
+            },
+            serverHasMoreResults(){
+                return this.resultsTotalCount > this.resultsRaw.length
             },
             results() {
                 return this.resultsRaw.map(r => {
@@ -233,7 +245,7 @@
                 this.fetch(true)
             },
             fetch(append) {
-                this.searching = true
+                this.loading = true
                 console.log("fetching!", this.search, this.oaHost)
                 return axios.get(this.searchUrl)
                     .then(resp => {
@@ -244,15 +256,15 @@
                         else {
                             this.resultsRaw = resp.data.list
                         }
-
+                        this.resultsTotalCount = resp.data.total_count
                         this.searchHasHappened = true
-                        this.searching = false
+                        this.loading = false
                         return true
                     })
                     .catch(e => {
                         console.log("error from server", e)
                         this.searchHasHappened = true
-                        this.searching = false
+                        this.loading = false
                         return false
                     })
             }
@@ -306,7 +318,7 @@
 
         .results {
             &.loading {
-                /*opacity: .5;*/
+                opacity: .5;
             }
             .header {
                 padding: 20px;
