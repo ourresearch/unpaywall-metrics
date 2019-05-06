@@ -46,9 +46,11 @@
                     class="elevation-1 main-table"
                     hide-actions
                      v-show="results.length"
+
             >
-                <template v-slot:items="props">
-                    <td>
+                <template
+                        v-slot:items="props">
+                    <td @click="showArticles(props.item.issnl)">
                             <span class="journal-title">
                                 {{ props.item.journal_name }}
                             </span>
@@ -122,6 +124,14 @@
             getJson() {
                 alert("coming soon!")
             },
+            showArticles(issn){
+                this.$router.push({
+                    path: "articles",
+                    query: {
+                        q: issn
+                    }
+                })
+            },
             myFilter(searchTerm) {
                 console.log("calling myFilter", searchTerm)
                 return false
@@ -164,6 +174,7 @@
     table.v-table tbody {
         td {
             font-size: 16px;
+            cursor: pointer;
 
             .issns {
                 display: block;

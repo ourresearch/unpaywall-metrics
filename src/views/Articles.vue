@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <v-flex>
         <v-layout row>
             <h1>Affected articles</h1>
             <v-spacer></v-spacer>
@@ -12,14 +12,27 @@
             <v-flex xs12>
                 <v-card min-height="200px">
                     <div class="search-inputs">
-                        <v-layout>
-                            <v-flex sm9>
+                        <v-layout align-center>
+<!--                            <v-flex shrink  class="search-type" v-show="search">-->
+<!--                                <span v-show="searchType=='doi'">-->
+<!--                                    DOI:-->
+<!--                                </span>-->
+<!--                                <span v-show="searchType=='issn'">-->
+<!--                                    ISSN:-->
+<!--                                </span>-->
+<!--                                <span v-show="searchType=='string'">-->
+<!--                                    Title:-->
+<!--                                </span>-->
+
+<!--                            </v-flex>-->
+                            <v-flex grow>
                                 <v-text-field
                                         single-line
                                         v-model="search"
                                         append-icon="search"
-                                        label="Search by title or DOI"
+                                        label="Search by title, ISSN, or DOI"
                                         type="text"
+                                        box
                                 ></v-text-field>
                             </v-flex>
                         </v-layout>
@@ -34,22 +47,36 @@
 
                     <v-divider></v-divider>
 
-                    <div class="results">
+                    <div class="results" :class="{loading: searching}">
                         <div class="header" v-show="searchHasHappened">
-
                             <div class="descr">
                                 <div class="no-results" v-show="!results.length">
                                     There are no articles matching "{{search}}" published by any of the
                                     <router-link to="./subscriptions">cancelled journals.</router-link>
                                 </div>
                                 <div class="results-meta" v-show="results.length">
-                                    <!--                                    <span>Showing</span>-->
+                                    Showing
 
-                                    <!--                                     {{ results.length }}  articles-->
+                                    <span v-show="results.length % 20 !== 0" class="all">all</span>
+
+                                    {{ results.length }}
+
+                                    <span v-show="results.length % 20 === 0" class="many">of many</span>
+
+                                    articles
+
+                                    <span v-show="search" class="search-is-dirty">matching "{{search}}"</span>
+                                    (most recent first)
+
+
+
                                 </div>
+
+
+
+
+
                             </div>
-
-
                         </div>
 
 
@@ -123,10 +150,18 @@
                             </v-layout>
                         </div>
                     </div>
+
+                    <v-layout justify-center class="show-more">
+                        <v-btn class="ma-4"
+                               @click="fetchNextResultsPage"
+                               color="primary">Show more results</v-btn>
+                    </v-layout>
+
+
                 </v-card>
             </v-flex>
         </v-layout>
-    </v-container>
+    </v-flex>
 
 
 </template>
@@ -143,7 +178,8 @@
             resultsRaw: [],
             search: '',
             searchHasHappened: false,
-            oaOnly: false
+            oaOnly: false,
+            resultsPage: 1
         }),
         computed: {
             searchUrl() {
@@ -151,9 +187,10 @@
                 let host = "none"
                 if (this.oaOnly) host = "any"
 
-                return "https://rickscafe-api.herokuapp.com/unpaywall-metrics/articles?q={q}&oa_host={host}"
+                return "https://rickscafe-api.herokuapp.com/unpaywall-metrics/articles?q={q}&oa_host={host}&page={page}"
                     .replace("{q}", this.search)
                     .replace("{host}", host)
+                    .replace("{page}", this.resultsPage)
 
             },
             results() {
@@ -166,6 +203,19 @@
                     })
                     return r
                 })
+            },
+            searchType(){
+                let issnRe = /^\d{4}-\d{4}$/
+                let doiRe = /^10\..+/
+                if (issnRe.test(this.search)){
+                    return "issn"
+                }
+                else if (doiRe.test(this.search)) {
+                    return "doi"
+                }
+                else {
+                    return "string"
+                }
             }
         },
         methods: {
@@ -173,18 +223,28 @@
                 alert("coming soon!")
             },
             getJson() {
-                alert("coming soon!")
+                window.location.href = this.searchUrl
             },
             visitLink(url) {
                 window.location.href = url
             },
-            fetch() {
+            fetchNextResultsPage(){
+                this.resultsPage += 1
+                this.fetch(true)
+            },
+            fetch(append) {
                 this.searching = true
                 console.log("fetching!", this.search, this.oaHost)
                 return axios.get(this.searchUrl)
                     .then(resp => {
                         console.log("got search results back", resp.data.list)
-                        this.resultsRaw = resp.data.list
+                        if (append){
+                            this.resultsRaw.push(...resp.data.list)
+                        }
+                        else {
+                            this.resultsRaw = resp.data.list
+                        }
+
                         this.searchHasHappened = true
                         this.searching = false
                         return true
@@ -224,7 +284,7 @@
 
                 this.$router.push({query: queryObj})
 
-            }, 250),
+            }, 10),
         }
     }
 </script>
@@ -233,12 +293,23 @@
 <style scoped lang="scss">
     .v-card {
         .search-inputs {
-            padding: 20px 20px 0;
+            padding: 40px 20px 0;
+            .search-type {
+                padding: 10px;
+                font-weight: bold;
+                font-size: 22px;
+            }
+            .v-input {
+                font-size: 22px !important;
+            }
         }
 
         .results {
+            &.loading {
+                /*opacity: .5;*/
+            }
             .header {
-                padding: 0 20px;
+                padding: 20px;
             }
 
             .result {
