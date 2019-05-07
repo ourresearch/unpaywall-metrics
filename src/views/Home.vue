@@ -16,7 +16,7 @@
                         </v-card-title>
 
                         <v-card-actions class="pa-4">
-                            <v-btn dark to="./subscriptions">View Journals</v-btn>
+                            <v-btn dark to="./subscriptions">View Subscriptions</v-btn>
                             <v-btn dark to="./articles">View Articles</v-btn>
                             <v-btn flat to="./faq">Read FAQ</v-btn>
 
