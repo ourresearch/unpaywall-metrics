@@ -214,7 +214,7 @@
                 let host = "none"
                 if (this.oaOnly) host = "any"
 
-                return "https://rickscafe-api.herokuapp.com/unpaywall-metrics/articles?q={q}&oa_host={host}&page={page}"
+                return "https://api.cdl.metrics.unpaywall.org/articles?q={q}&oa_host={host}&page={page}"
                     .replace("{q}", this.search)
                     .replace("{host}", host)
                     .replace("{page}", this.resultsPage)

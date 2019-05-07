@@ -137,7 +137,7 @@
                 return false
             },
             fetch() {
-                let url = "https://api.rickscafe.io/unpaywall-metrics/subscriptions?bigdeal=cdl_elsevier"
+                let url = "https://api.cdl.metrics.unpaywall.org/subscriptions?bigdeal=cdl_elsevier"
                 return axios.get(url)
                     .then(resp => {
 
