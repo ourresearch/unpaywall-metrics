@@ -2,7 +2,7 @@
     <div class="page journals">
 
         <v-layout row>
-            <h1>Cancelled subscriptions</h1>
+            <h1>Affected subscriptions</h1>
             <v-spacer></v-spacer>
             <v-btn @click="getCsv">CSV</v-btn>
             <v-btn @click="getJson">JSON</v-btn>

@@ -9,7 +9,7 @@
                         <v-card-title primary-title>
                             <div>
                                 <h3 class="headline mb-0">About this website</h3>
-                                <div> CDL content goes here. Until then, some <a href="https://hipsum.co/?paras=5&type=hipster-centric&start-with-lorem=1">Hipster Ipsum:</a>  Lorem ipsum dolor amet scenester man bun synth semiotics vexillologist. Cred gluten-free venmo beard kitsch, cardigan edison bulb single-origin coffee meditation blog flexitarian kickstarter tote bag chartreuse. Green juice lumbersexual try-hard shabby chic, YOLO austin before they sold out gentrify roof party hell of hexagon trust fund brooklyn art party freegan. Hoodie copper mug small batch gastropub polaroid. Messenger bag beard shoreditch stumptown waistcoat 90's vice. Blog art party banh mi, mixtape humblebrag green juice vice four loko cliche brooklyn live-edge distillery pabst plaid dreamcatcher. Tousled sustainable chartreuse locavore, lumbersexual pickled forage intelligentsia schlitz lo-fi lomo.
+                                <div> The University of California terminated its subscriptions to Elsevier journals effective January 1, 2019.  Access to articles published from 2019 forward, as well as a limited amount of historical content, is no longer available to UC users directly on Elsevier’s ScienceDirect platform. This website provides information about the individual articles affected by the cancellation, including the availability of open access copies. The data sets provided through this site are both searchable and downloadable.
 
                                 </div>
                             </div>

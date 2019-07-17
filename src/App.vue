@@ -6,7 +6,7 @@
       <v-toolbar-side-icon @click.stop="drawer = !drawer" class="hidden-sm-and-up"></v-toolbar-side-icon>
       <v-toolbar-title>
         <v-btn flat to="/" active-class="">
-        UC cancellation browser
+        Open Access Elsevier Article Discovery
 
         </v-btn>
       </v-toolbar-title>
