@@ -105,11 +105,15 @@
         computed: {
             results() {
                 return this.rawResults.filter(x => {
-                    if (!this.search) {
+                    let mySearch = this.search.toLowerCase()
+
+                    if (!mySearch) {
                         return true
-                    } else if (x.issns.join().indexOf(this.search) > -1) {
+                    }
+
+                    if (x.issns.join().indexOf(mySearch) > -1) {
                         return true
-                    } else if (x.journal_name.indexOf(this.search) > -1) {
+                    } else if (x.journal_name.toLowerCase().indexOf(mySearch) > -1) {
                         return true
                     } else {
                         return false
