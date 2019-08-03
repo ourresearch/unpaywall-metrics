@@ -42,7 +42,7 @@
           <strong>Open source!</strong> Code is <a href="https://github.com/Impactstory/unpaywall-metrics">here (frontend)</a> and <a
                 href="https://github.com/Impactstory/rickscafe-api">here (API)</a>.
         </div>
-        <div>Built by <a href="https://impactstory.org">Impactstory</a>, with funding from <a href="https://www.cdlib.org/">CDL</a>.</div>
+        <div>Built by <a href="https://our-research.org">Our Research</a>, with funding from <a href="https://www.cdlib.org/">CDL</a>.</div>
 
       </div>
 
