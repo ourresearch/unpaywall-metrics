@@ -59,7 +59,8 @@
                             </span>
 
                     </td>
-                    <td>{{ props.item.subscription_start_date }}</td>
+                    <td>{{ props.item.affected_start_date }}</td>
+                    <td>{{ props.item.affected_end_date }}</td>
                     <td class="text-xs-right">{{ props.item.num_dois }}</td>
                     <td class="text-xs-right">{{ parseInt(props.item.proportion_oa * 100) }}%</td>
                     <td class="text-xs-right">{{ parseInt(props.item.proportion_publisher_hosted * 100)}}%</td>
@@ -95,7 +96,8 @@
             search: '',
             headers: [
                 {text: "Journal name", value: "journal_name"},
-                {text: "Cancelled since", value: "subscription_start_date"},
+                {text: "Affected start", value: "affected_start_date"},
+                {text: "Affected end", value: "affected_end_date"},
                 {text: "Affected DOIs", value: "num_dois"},
                 {text: "Any OA (%)", value: "proportion_oa"},
                 {text: "Publisher OA (%)", value: "proportion_publisher_hosted"},
@@ -141,7 +143,8 @@
                 return false
             },
             fetch() {
-                let url = "https://api.cdl.metrics.unpaywall.org/subscriptions?bigdeal=cdl_elsevier"
+                 let url = "https://api.cdl.metrics.unpaywall.org/subscriptions?bigdeal=cdl_elsevier"
+                // let url = "http://localhost:5003/subscriptions?bigdeal=cdl_elsevier"
                 return axios.get(url)
                     .then(resp => {
 
