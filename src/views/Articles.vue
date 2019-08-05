@@ -322,7 +322,7 @@
 
                 this.$router.push({query: queryObj})
 
-            }, 10),
+            }, 500),
         }
     }
 </script>
