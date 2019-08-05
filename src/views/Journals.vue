@@ -59,7 +59,8 @@
                             </span>
 
                     </td>
-                    <td>{{ props.item.subscription_start_date }}</td>
+                    <td>{{ props.item.affected_start_date }}</td>
+                    <td>{{ props.item.affected_end_date }}</td>
                     <td class="text-xs-right">{{ props.item.num_dois }}</td>
                     <td class="text-xs-right">{{ parseInt(props.item.proportion_oa * 100) }}%</td>
                     <td class="text-xs-right">{{ parseInt(props.item.proportion_publisher_hosted * 100)}}%</td>
