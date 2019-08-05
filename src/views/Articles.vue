@@ -311,6 +311,7 @@
                 this.fetch()
             },
             search: _.debounce(function (newVal) {
+                this.resultsPage = 1 // when you do a new search, you always want the first page of results.
                 this.fetch()
                 let queryObj
                 if (this.search === "") {
