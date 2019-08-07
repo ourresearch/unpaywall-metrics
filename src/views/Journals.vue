@@ -4,8 +4,26 @@
         <v-layout row>
             <h1>Affected subscriptions</h1>
             <v-spacer></v-spacer>
-            <v-btn @click="getCsv">CSV</v-btn>
-            <v-btn @click="getJson">JSON</v-btn>
+            <v-menu offset-y>
+                <template v-slot:activator="{ on }">
+                    <v-btn
+                            small
+                            flat
+                            v-on="on"
+                    >
+                        <div>Export <i class="fas fa-file-export"></i></div>
+
+                    </v-btn>
+                </template>
+                <v-list>
+                    <v-list-tile @click="getCsv">
+                        <v-list-tile-title>Download as CSV</v-list-tile-title>
+                    </v-list-tile>
+                    <v-list-tile @click="getJson">
+                        <v-list-tile-title>View in API (JSON)</v-list-tile-title>
+                    </v-list-tile>
+                </v-list>
+            </v-menu>
 
 
         </v-layout>
@@ -125,10 +143,10 @@
         },
         methods: {
             getCsv() {
-                alert("coming soon!")
+                window.location.href = "https://api.cdl.metrics.unpaywall.org/subscriptions.csv"
             },
             getJson() {
-                alert("coming soon!")
+                window.location.href = "https://api.cdl.metrics.unpaywall.org/subscriptions?bigdeal=cdl_elsevier"
             },
             showArticles(issn){
                 this.$router.push({

@@ -15,9 +15,6 @@
                     </v-btn>
                 </template>
                 <v-list>
-                    <v-list-tile @click="getCsv">
-                        <v-list-tile-title>Download full dataset (CSV)</v-list-tile-title>
-                    </v-list-tile>
                     <v-list-tile @click="getJson">
                         <v-list-tile-title>View current page in API (JSON)</v-list-tile-title>
                     </v-list-tile>
