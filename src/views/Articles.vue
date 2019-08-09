@@ -22,8 +22,6 @@
             </v-menu>
 
 
-
-
         </v-layout>
         <v-layout row>
             <v-flex xs12>
@@ -42,11 +40,13 @@
                             <!--                                </span>-->
 
                             <!--                            </v-flex>-->
-                            <v-flex grow>
+                            <v-flex xs6 grow>
                                 <v-text-field
                                         single-line
                                         v-model="search"
-                                        append-icon="search"
+                                        append-outer-icon="search"
+                                        @click:append-outer="fetch"
+                                        @keypress.enter="fetch"
                                         label="Search by title, ISSN, or DOI"
                                         type="text"
                                         box
@@ -64,7 +64,14 @@
 
                     <v-divider></v-divider>
 
-                    <div class="results" :class="{loading: loading}">
+
+                    <div class="loading" v-show="loading">
+                        <v-progress-linear
+                                indeterminate
+                        ></v-progress-linear>
+                    </div>
+
+                    <div class="results" v-show="!loading">
                         <div class="header" v-show="searchHasHappened">
                             <div class="descr">
                                 <div class="no-results" v-show="!results.length">
@@ -79,15 +86,16 @@
                                     {{ results.length }}
 
                                     <span v-show="serverHasMoreResults" class="total-count">of {{resultsTotalCount.toLocaleString()}}</span>
+                                    <span v-show="search"> matching </span>
 
                                     articles
 
-                                    <span v-show="search" class="search-is-dirty">
-                                        matching
-                                        <span v-show="searchType=='issn'" class="issn">ISSN</span>
-                                        <span v-show="searchType=='doi'" class="doi">DOI</span>
-                                        "{{search}}"
-                                    </span>
+                                    <!--                                    <span v-show="search" class="search-is-dirty">-->
+                                    <!--                                        matching-->
+                                    <!--                                        <span v-show="searchType=='issn'" class="issn">ISSN</span>-->
+                                    <!--                                        <span v-show="searchType=='doi'" class="doi">DOI</span>-->
+                                    <!--                                        "{{search}}"-->
+                                    <!--                                    </span>-->
                                     <span v-show="results.length > 1" class="sort">(most recent first)</span>
 
 
@@ -169,7 +177,7 @@
                         </div>
                     </div>
 
-                    <v-layout justify-center class="show-more">
+                    <v-layout justify-center class="show-more" v-show="!loading">
                         <v-btn class="ma-4"
                                v-show="serverHasMoreResults"
                                @click="fetchNextResultsPage"
@@ -230,10 +238,9 @@
                     })
 
                     r.oa_locations.filter(x => x.endpoint_id).map(x => {
-                        if (hosts[x.endpoint_id]){
+                        if (hosts[x.endpoint_id]) {
                             x.hostName = hosts[x.endpoint_id].institution_name
-                        }
-                        else {
+                        } else {
                             x.hostName = x.url
                         }
                     })
@@ -270,6 +277,7 @@
             },
             fetch(append) {
                 this.loading = true
+                this.search
                 console.log("fetching!", this.search, this.oaHost)
                 return axios.get(this.searchUrl)
                     .then(resp => {
@@ -306,20 +314,7 @@
             oaOnly: function (newVal) {
                 console.log("oaOnly changed")
                 this.fetch()
-            },
-            search: _.debounce(function (newVal) {
-                this.resultsPage = 1 // when you do a new search, you always want the first page of results.
-                this.fetch()
-                let queryObj
-                if (this.search === "") {
-                    queryObj = {}
-                } else {
-                    queryObj = {q: this.search}
-                }
-
-                this.$router.push({query: queryObj})
-
-            }, 500),
+            }
         }
     }
 </script>
