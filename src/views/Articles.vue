@@ -43,10 +43,10 @@
                             <v-flex xs6 grow>
                                 <v-text-field
                                         single-line
-                                        v-model="search"
+                                        v-model="searchInputNow"
                                         append-outer-icon="search"
-                                        @click:append-outer="fetch"
-                                        @keypress.enter="fetch"
+                                        @click:append-outer="search = searchInputNow"
+                                        @keypress.enter="search = searchInputNow"
                                         label="Search by title, ISSN, or DOI"
                                         type="text"
                                         box
@@ -79,11 +79,11 @@
                                     <router-link to="./subscriptions">cancelled journals.</router-link>
                                 </div>
                                 <div class="results-meta" v-show="results.length">
-                                    Showing
+                                    Page
 
                                     <span v-show="!serverHasMoreResults" class="all">all</span>
 
-                                    {{ results.length }}
+                                    {{ resultsPage }}
 
                                     <span v-show="serverHasMoreResults" class="total-count">of {{resultsTotalCount.toLocaleString()}}</span>
                                     <span v-show="search"> matching </span>
@@ -178,11 +178,15 @@
                     </div>
 
                     <v-layout justify-center class="show-more" v-show="!loading">
-                        <v-btn class="ma-4"
-                               v-show="serverHasMoreResults"
-                               @click="fetchNextResultsPage"
-                               color="primary">Show more results
-                        </v-btn>
+                        <v-pagination
+                                class="ma-4"
+                          v-model="resultsPage"
+                          :length="20"
+                          :total-visible="7"
+                        ></v-pagination>
+
+
+
                     </v-layout>
 
 
@@ -206,6 +210,7 @@
         data: () => ({
             resultsRaw: [],
             search: '',
+            searchInputNow: '',
             searchHasHappened: false,
             oaOnly: false,
             resultsPage: 1,
@@ -271,22 +276,15 @@
             visitLink(url) {
                 window.location.href = url
             },
-            fetchNextResultsPage() {
-                this.resultsPage += 1
-                this.fetch(true)
-            },
-            fetch(append) {
+            fetch() {
                 this.loading = true
-                this.search
-                console.log("fetching!", this.search, this.oaHost)
+                this.search = this.searchInputNow
+                console.log("fetching!", this.search, this.oaHost, this.resultsPage)
+
                 return axios.get(this.searchUrl)
                     .then(resp => {
                         console.log("got search results back", resp.data.list)
-                        if (append) {
-                            this.resultsRaw.push(...resp.data.list)
-                        } else {
-                            this.resultsRaw = resp.data.list
-                        }
+                        this.resultsRaw = resp.data.list
                         this.resultsTotalCount = resp.data.total_count
                         this.searchHasHappened = true
                         this.loading = false
@@ -302,17 +300,29 @@
 
         },
         mounted() {
+            // not currently using this block...the model is not reflected in the URL
             let q = this.$route.query.q
             if (q) {
                 console.log("query:", q)
                 this.search = q
             }
 
+            // we are using this tho
             this.fetch()
         },
         watch: {
             oaOnly: function (newVal) {
-                console.log("oaOnly changed")
+                console.log("oaOnly changed", newVal)
+                this.resultsPage = 1
+                this.fetch()
+            },
+            resultsPage: function(newVal){
+                console.log("resultsPage changed", newVal)
+                this.fetch()
+            },
+            search: function(newVal){
+                console.log("search term changed", newVal)
+                this.resultsPage = 1
                 this.fetch()
             }
         }
