@@ -15,7 +15,7 @@
                     </v-btn>
                 </template>
                 <v-list>
-                    <v-list-tile @click="getJson">
+                    <v-list-tile @click="articleSearch.getApiUrl()">
                         <v-list-tile-title>View current page in API (JSON)</v-list-tile-title>
                     </v-list-tile>
                 </v-list>
@@ -28,25 +28,13 @@
                 <v-card min-height="200px">
                     <div class="search-inputs">
                         <v-layout align-center>
-                            <!--                            <v-flex shrink  class="search-type" v-show="search">-->
-                            <!--                                <span v-show="searchType=='doi'">-->
-                            <!--                                    DOI:-->
-                            <!--                                </span>-->
-                            <!--                                <span v-show="searchType=='issn'">-->
-                            <!--                                    ISSN:-->
-                            <!--                                </span>-->
-                            <!--                                <span v-show="searchType=='string'">-->
-                            <!--                                    Title:-->
-                            <!--                                </span>-->
-
-                            <!--                            </v-flex>-->
                             <v-flex xs6 grow>
                                 <v-text-field
                                         single-line
                                         v-model="searchInputNow"
                                         append-outer-icon="search"
-                                        @click:append-outer="search = searchInputNow"
-                                        @keypress.enter="search = searchInputNow"
+                                        @click:append-outer="articleSearch.params.q.set(searchInputNow)"
+                                        @keypress.enter="articleSearch.params.q.set(searchInputNow)"
                                         label="Search by title, ISSN, or DOI"
                                         type="text"
                                         box
@@ -55,7 +43,7 @@
                         </v-layout>
                         <v-layout class="align-center">
                             <v-switch
-                                    v-model="oaOnly"
+                                    v-model="articleSearch.params.isOa.selected"
                                     label="Show only articles with OA copies"
                             ></v-switch>
                         </v-layout>
@@ -65,45 +53,34 @@
                     <v-divider></v-divider>
 
 
-                    <div class="loading" v-show="loading">
+                    <div class="loading" v-show="articleSearch.loadingState=='loading'">
                         <v-progress-linear
                                 indeterminate
                         ></v-progress-linear>
                     </div>
 
-                    <div class="results" v-show="!loading">
-                        <div class="header" v-show="searchHasHappened">
-                            <div class="descr">
-                                <div class="no-results" v-show="!results.length">
-                                    There are no articles matching "{{search}}" published by any of the
-                                    <router-link to="./subscriptions">cancelled journals.</router-link>
-                                </div>
-                                <div class="results-meta" v-show="results.length">
-                                    Page
+                    <div class="results-header" v-show="articleSearch.loadingState=='complete'">
+                        <div class="descr">
+                            <div class="no-results" v-show="!results.length">
+                                Sorry, there are no articles matching "{{articleSearch.params.q.selected}}" published by any of the
+                                <router-link to="./subscriptions">cancelled journals.</router-link>
+                            </div>
 
-                                    <span v-show="!serverHasMoreResults" class="all">all</span>
-
-                                    {{ resultsPage }}
-
-                                    <span v-show="serverHasMoreResults" class="total-count">of {{resultsTotalCount.toLocaleString()}}</span>
-                                    <span v-show="search"> matching </span>
-
-                                    articles
-
-                                    <!--                                    <span v-show="search" class="search-is-dirty">-->
-                                    <!--                                        matching-->
-                                    <!--                                        <span v-show="searchType=='issn'" class="issn">ISSN</span>-->
-                                    <!--                                        <span v-show="searchType=='doi'" class="doi">DOI</span>-->
-                                    <!--                                        "{{search}}"-->
-                                    <!--                                    </span>-->
-                                    <span v-show="results.length > 1" class="sort">(most recent first)</span>
+                            <div class="results-meta" v-show="results.length">
+                                Showing
+                                {{ articleSearch.getPageOffsets().start }}&ndash;{{ articleSearch.getPageOffsets().end }} of {{ articleSearch.resultsCount.toLocaleString() }} matching results
 
 
-                                </div>
+                                <span v-show="results.length > 1" class="sort">(most recent first)</span>
 
 
                             </div>
+
+
                         </div>
+                    </div>
+
+                    <div class="results" v-show="results.length">
 
 
                         <div class="result" v-for="result in results">
@@ -177,11 +154,11 @@
                         </div>
                     </div>
 
-                    <v-layout justify-center class="show-more" v-show="!loading">
+                    <v-layout justify-center class="show-more" v-show="articleSearch.loadingState=='complete' && results.length">
                         <v-pagination
                                 class="ma-4"
-                          v-model="resultsPage"
-                          :length="20"
+                          v-model="articleSearch.params.page.selected"
+                          :length="articleSearch.getNumPages()"
                           :total-visible="7"
                         ></v-pagination>
 
@@ -203,6 +180,7 @@
     import axios from 'axios'
     import _ from 'lodash'
     import {hosts} from "../hosts";
+    import {articleSearch} from "../search"
 
 
     export default {
@@ -215,8 +193,8 @@
             oaOnly: false,
             resultsPage: 1,
             resultsTotalCount: 0,
-            loading: false,
-            hosts: hosts
+            hosts: hosts,
+            articleSearch: articleSearch
         }),
         computed: {
             searchUrl() {
@@ -234,7 +212,7 @@
                 return this.resultsTotalCount > this.resultsRaw.length
             },
             results() {
-                return this.resultsRaw.map(r => {
+                return this.articleSearch.results.map(r => {
                     r.publisherLocation = r.oa_locations.find(x => {
                         return x.host_type === "publisher"
                     })
@@ -276,6 +254,12 @@
             visitLink(url) {
                 window.location.href = url
             },
+            updateModel(){
+                this.$router.push({
+                        query: articleSearch.getParams(true)
+                    });
+                this.articleSearch.fetchResults()
+            },
             fetch() {
                 this.loading = true
                 this.search = this.searchInputNow
@@ -300,31 +284,27 @@
 
         },
         mounted() {
-            // not currently using this block...the model is not reflected in the URL
-            let q = this.$route.query.q
-            if (q) {
-                console.log("query:", q)
-                this.search = q
-            }
-
-            // we are using this tho
-            this.fetch()
+            this.articleSearch.setUserInputsFromUrl(this.$route.query)
+            this.articleSearch.fetchResults()
+            this.searchInputNow = this.articleSearch.params.q.selected.slice()
         },
         watch: {
-            oaOnly: function (newVal) {
-                console.log("oaOnly changed", newVal)
-                this.resultsPage = 1
-                this.fetch()
+            // not the most elegant solution.
+            // we need to reset the page for most searches, except of course
+            // when we are just changing the page. figure out a nicer way
+            // to do this later.
+            "articleSearch.params.isOa.selected": function (newVal) {
+                this.articleSearch.params.page.reset()
+                this.updateModel()
             },
-            resultsPage: function(newVal){
-                console.log("resultsPage changed", newVal)
-                this.fetch()
+            "articleSearch.params.q.selected": function (newVal) {
+                this.articleSearch.params.page.reset()
+                this.updateModel()
             },
-            search: function(newVal){
-                console.log("search term changed", newVal)
-                this.resultsPage = 1
-                this.fetch()
-            }
+            "articleSearch.params.page.selected": function (newVal) {
+                this.updateModel()
+            },
+
         }
     }
 </script>
@@ -346,14 +326,14 @@
             }
         }
 
+        .results-header {
+            padding: 20px;
+        }
         .results {
             &.loading {
                 opacity: .5;
             }
 
-            .header {
-                padding: 20px;
-            }
 
             .result {
                 padding: 20px;

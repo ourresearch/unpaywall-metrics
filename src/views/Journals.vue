@@ -68,7 +68,7 @@
             >
                 <template
                         v-slot:items="props">
-                    <td @click="showArticles(props.item.issnl)">
+                    <td @click="showArticles(props.item.journal_issn_l)">
                             <span class="journal-title" style="font-size: 16px;">
                                 {{ props.item.journal_name }}
                             </span>

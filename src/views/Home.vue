@@ -144,11 +144,11 @@
             },
             results() {
                 return this.rawResults.filter(x => {
-                    if (!this.search) {
+                    if (!this.articleSearch) {
                         return true
-                    } else if (x.issns.join().indexOf(this.search) > -1) {
+                    } else if (x.issns.join().indexOf(this.articleSearch) > -1) {
                         return true
-                    } else if (x.journal_name.indexOf(this.search) > -1) {
+                    } else if (x.journal_name.indexOf(this.articleSearch) > -1) {
                         return true
                     } else {
                         return false
