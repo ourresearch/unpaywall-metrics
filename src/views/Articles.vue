@@ -110,7 +110,7 @@
 
                                 <!--                                PUBLISHER LINK-->
                                 <div class="oa-link publisher" v-if="result.publisherLocation">
-                                    <a :href="result.doi_url" class="fulltext-link publisher">
+                                    <a :href="result.doi_url" target="_blank" class="fulltext-link publisher">
                                         <span class="text">
                                             <i class="fas fa-unlock"></i>
                                             Publisher fulltext
@@ -252,7 +252,7 @@
                 window.location.href = this.searchUrl
             },
             visitLink(url) {
-                window.location.href = url
+                window.open(url, "_blank")
             },
             updateModel(){
                 this.$router.push({
