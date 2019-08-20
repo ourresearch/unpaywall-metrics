@@ -15,7 +15,7 @@
                     </v-btn>
                 </template>
                 <v-list>
-                    <v-list-tile @click="articleSearch.getApiUrl()">
+                    <v-list-tile :href="articleSearch.getApiUrl()" target="_blank">
                         <v-list-tile-title>View current page in API (JSON)</v-list-tile-title>
                     </v-list-tile>
                 </v-list>
