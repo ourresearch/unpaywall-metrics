@@ -284,6 +284,7 @@
 
         },
         mounted() {
+            this.articleSearch.reset()
             this.articleSearch.setUserInputsFromUrl(this.$route.query)
             this.articleSearch.fetchResults()
             this.searchInputNow = this.articleSearch.params.q.selected.slice()

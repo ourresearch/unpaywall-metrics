@@ -147,6 +147,11 @@ export const articleSearch = {
         return [this.baseUrl, queryStr].join("?")
     },
 
+    reset(){
+        this.results = []
+        this.resultsCount = 0
+    },
+
     getParams(hideDefaultValues){
         let ret = {}
         Object.entries(this.params).forEach(([paramName, paramObj]) => {
