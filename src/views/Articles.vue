@@ -62,7 +62,7 @@
                     <div class="results-header" v-show="articleSearch.loadingState=='complete'">
                         <div class="descr">
                             <div class="no-results" v-show="!results.length">
-                                Sorry, there are no articles matching "{{articleSearch.params.q.selected}}" published by any of the
+                                Sorry, there are no matching articles  published by any of the
                                 <router-link to="./subscriptions">cancelled journals.</router-link>
                             </div>
 
