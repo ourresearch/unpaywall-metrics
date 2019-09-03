@@ -16,7 +16,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="mailto:team@impactstory.org">
+                            <a href="mailto:team@ourresearch.org">
                                 <i class="far fa-envelope"></i>
                                 <span class="text">Email</span>
                             </a>

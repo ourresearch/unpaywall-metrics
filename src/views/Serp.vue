@@ -85,7 +85,7 @@
                     </md-button>
                 </div>
                 <div class="report">
-                    <a href="mailto:team@impactstory.org">Report inappropriate images</a>
+                    <a href="mailto:team@ourresearch.org">Report inappropriate images</a>
                 </div>
             </div>
 
