@@ -43,7 +43,7 @@
 
             <div class="col md-layout-item md-size-50 md-xsmall-size-100 about">
                 <div>
-                    Built with <i class="far fa-heart"></i> at <a href="http://impactstory.org">Impactstory.</a>
+                    Built with <i class="far fa-heart"></i> at <a href="http://ourresearch.org">Our Research.</a>
                 </div>
             </div>
         </div>
